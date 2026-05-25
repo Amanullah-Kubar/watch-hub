@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@font-face {
+  font-family: 'Nikanely';
+  src: url('/fonts/Nikanely.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+}
+h1,h2,h3,h4,h5,h6,:hover {
+  cursor: default;
+}
+button:hover{
+  cursor: pointer;
+}
