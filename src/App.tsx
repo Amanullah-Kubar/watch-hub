@@ -3,6 +3,7 @@ import './App.css'
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Collection from './components/sections/collections/Collection';
+import AuthPage from './components/auth/AuthPage';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
    
           {/* When the user is at the homepage (/) show the Collections grid */}
         <Route path="/collections/:collectionName" element={<Collection />} />
+        <Route path="/auth" element={<AuthPage />} />
 
         {/* If you build more pages later, add them here: */}
         {/* <Route path="/collection/modern" element={<ModernCollection />} /> */}
@@ -23,6 +25,13 @@ function App() {
     </Routes>
 
     </BrowserRouter>
+
+
+    // <>
+    // {
+    //   user ? ("Logged in as: " + user.email) : "Not logged in"
+    // }
+    // </>
   )
 }
 

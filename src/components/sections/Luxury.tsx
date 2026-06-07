@@ -1,10 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard";
-import UseReveal from "../hooks/UseReveal";
 
 function Luxury() {
-    const ref = UseReveal();
 
     return (
         <>

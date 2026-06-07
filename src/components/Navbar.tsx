@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Search, ShoppingBag, Menu, X } from 'lucide-react';
+import Corosel from './Corosel';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -70,15 +71,16 @@ export default function Navbar() {
 
                         {/* CTA */}
                         <a href="#collections">
-                        <button className="hidden sm:block relative overflow-hidden rounded-2xl px-5 py-3 text-sm tracking-wide font-medium border border-[#D6B98C]/25 bg-[linear-gradient(145deg,#2A211A,#16120F)] shadow-[0_6px_25px_rgba(0,0,0,0.45)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(214,185,140,0.18)] group"
-                   
-                        >
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(120deg,transparent,rgba(214,185,140,0.15),transparent)] -translate-x-full group-hover:translate-x-full" />
-                            <span className="relative flex items-center gap-2 text-[#F8F5F0]">
-                                Explore Collection
-                            </span>
-                        </button>
+                            <button className="hidden sm:block relative overflow-hidden rounded-2xl px-5 py-3 text-sm tracking-wide font-medium border border-[#D6B98C]/25 bg-[linear-gradient(145deg,#2A211A,#16120F)] shadow-[0_6px_25px_rgba(0,0,0,0.45)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(214,185,140,0.18)] group"
+
+                            >
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(120deg,transparent,rgba(214,185,140,0.15),transparent)] -translate-x-full group-hover:translate-x-full" />
+                                <span className="relative flex items-center gap-2 text-[#F8F5F0]">
+                                    Explore Collection
+                                </span>
+                            </button>
                         </a>
+                        <Corosel />
 
                         {/* Mobile Hamburger Button */}
                         <button
@@ -93,6 +95,7 @@ export default function Navbar() {
                         </button>
                     </div>
                 </div>
+
             </nav>
 
             {/* Mobile Drawer Overlay - Moved out of <nav> and given fixed positioning parameters */}
@@ -106,9 +109,9 @@ export default function Navbar() {
                             placeholder="Search luxury timepieces..."
                             className="w-full bg-white/5 border border-white/10 text-sm pl-4 pr-12 py-3 rounded-xl text-[#F8F5F0] placeholder-[#F8F5F0]/40 outline-none focus:border-[#D6B98C]/40 transition-all duration-300"
                         />
-                        <Search className="absolute right-4 w-5 h-5 text-[#F8F5F0]/40" onClick={() =>{
+                        <Search className="absolute right-4 w-5 h-5 text-[#F8F5F0]/40" onClick={() => {
                             setIsOpen(!isOpen);
-                        }}/>
+                        }} />
                     </div>
 
                     {/* Mobile Links */}
@@ -124,6 +127,7 @@ export default function Navbar() {
                                 {item}
                             </a>
                         ))}
+                        <Corosel />
                     </div>
 
                     {/* Mobile Explore Button */}
