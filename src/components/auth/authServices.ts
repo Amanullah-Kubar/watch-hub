@@ -1,74 +1,79 @@
+import type { SignInResource, SignUpResource } from "@clerk/types";
 import { supabase } from "../../config/supabase";
 
-export const handleLogin = async (email: string, password: string) => {
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+export const login = async (
+    signIn: SignInResource,
+    email: string,
+    password: string
+) => {
+    return await signIn.create({
+        identifier: email,
+        password,
+    });
+};
+
+export const signup = async (
+    signUp: SignUpResource,
+    name: string,
+    email: string,
+    password: string,
+    phone: string
+) => {
+    const result = await signUp.create({
+        firstName: name,
+        emailAddress: email,
+        password,
+        unsafeMetadata: {
+            fullName: name,
+            phone,
+        },
+    });
+
+    await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+    });
+    return result;
+};
+export const saveProfile = async (
+    userId: string,
+    email: string,
+    phone: string,
+    fullName: string
+) => {
+    const { data, error } = await supabase
+        .from("profiles")
+        .upsert({
+            id: userId,
             email,
-            password,
+            phone,
+            full_name: fullName,
         });
 
-        if (error) {
-            console.error("Login error:", error.message);
-            return error;
-        }
-        return data;
-    } catch (error) {
-        alert(error);
-        return error;
+    if (error) {
+        console.error(error);
+        throw error;
     }
+
+    return data;
+};
+export const googleLogin = async (
+    signIn: SignInResource
+) => {
+
+    return await signIn.authenticateWithRedirect({
+        strategy: "oauth_google",
+        redirectUrl: "/sso-callback",
+        redirectUrlComplete: "/",
+    });
+
+    
 };
 
-export const handleSignup = async (email: string, password: string, name: string) => {
-    try {
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    displayName: name,
-                }
-            },
-        });
-
-        if (error) {
-            console.error("Signup error:", error.message);
-            return error;
-        }
-        return data;
-    } catch (error) {
-        alert(error);
-        return error;
-    }
-};
-
-export const handleGoogleLogin = async () => {
-    try {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-        });
-
-        console.log("DATA:", data);
-        console.log("ERROR:", error);
-
-        if (error) {
-            console.error(error);
-        }
-    } catch (err) {
-        console.error("CATCH:", err);
-    }
-};
-
-export const handleLogout = async () => {
-    try {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            console.error("Logout error:", error.message);
-            return error;
-        }
-        return true;
-    }
-    catch (error) {
-        alert(error);
-        return error;
-    }
+export const getErrorMessage = (err: any) => {
+    return (
+        err?.errors?.[0]?.longMessage ??
+        err?.errors?.[0]?.message ??
+        err?.message ??
+        "Authentication failed"
+    );
 };

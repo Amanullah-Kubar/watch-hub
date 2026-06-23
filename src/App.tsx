@@ -4,28 +4,30 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Collection from './components/sections/collections/Collection';
 import AuthPage from './components/auth/AuthPage';
+import SsoCallback from './components/SsoCallback';
+import VerifyEmail from './components/VarifyEmail';
+import UserSync from './components/UserSync';
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <Navbar/>
-    <Routes>
-      <Route path="/" element={
-        <Home/>
-        } />
-   
-          {/* When the user is at the homepage (/) show the Collections grid */}
-        <Route path="/collections/:collectionName" element={<Collection />} />
-        <Route path="/auth" element={<AuthPage />} />
+    <>
+      <BrowserRouter>
+        <UserSync />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={
+            <Home />
+          } />
+          <Route path="/collections/:collectionName" element={<Collection />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/sso-callback" element={<SsoCallback />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+        </Routes>
 
-        {/* If you build more pages later, add them here: */}
-        {/* <Route path="/collection/modern" element={<ModernCollection />} /> */}
-  
-    </Routes>
+      </BrowserRouter>
 
-    </BrowserRouter>
-
+    </>
 
     // <>
     // {

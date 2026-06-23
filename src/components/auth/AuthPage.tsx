@@ -1,21 +1,40 @@
-import { type FormEvent } from 'react';
-import { type AuthResponse } from '@supabase/supabase-js';
-import { useState } from 'react'
-import { handleGoogleLogin, handleLogin, handleSignup } from './authServices';
-import { EyeClosed, EyeIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+// AuthPage.tsx
+import { type FormEvent, useState } from "react";
+import { EyeClosed, EyeIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+import {
+    useSignIn,
+    useSignUp,
+} from "@clerk/clerk-react";
+
+import {
+    login,
+    signup,
+    googleLogin,
+    getErrorMessage,
+} from "./authServices";
 
 function AuthPage() {
+
+    const { isLoaded: signInLoaded, signIn, setActive } = useSignIn();
+
+    const {
+        signUp,
+        isLoaded: signUpLoaded,
+    } = useSignUp();
     const navigate = useNavigate();
 
     const [page, setPage] = useState<'login' | 'signup'>('login')
     const [showPassword, setShowPassword] = useState(false);
     const [credError, setCredError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [form, setForm] = useState({
         email: '',
         password: '',
         confirmPassword: '',
-        name: ''
+        name: '',
+        phone: '',
     })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,63 +46,81 @@ function AuthPage() {
         }));
     };
 
-    // Derived state: calculated on every render, preventing stale validation bugs
+    // Lenient version for inline UI feedback while typing (don't yell at the
+    // user just because they haven't reached the confirm-password field yet)
     const passMatch = form.password === form.confirmPassword || form.confirmPassword === '';
 
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault(); // Stop native browser page refresh
+        setCredError(null);
 
-    if (page === 'signup' && !passMatch) {
-        setCredError("Passwords do not match!");
-        return; 
-    }
-
-    if (page === 'login') {
-        // cast or infer the response type from your handleLogin function
-        const result = await handleLogin(form.email, form.password) as AuthResponse['data'] | Error;
-        
-        // Check if result is an Error object or contains no active session
-        if (result instanceof Error || !('session' in result) || !result.session) {
-            const errorMessage = result instanceof Error ? result.message : "Invalid login credentials.";
-            setCredError(errorMessage);
+        if (
+            page === "signup" &&
+            form.password !== form.confirmPassword
+        ) {
+            setCredError("Passwords do not match");
             return;
         }
 
-        // Successfully authenticated
-        navigate('/'); 
-        return;
-    }
+        setIsSubmitting(true);
 
-    if (page === 'signup') {
-        const result = await handleSignup(form.email, form.password, form.name) as AuthResponse['data'] | Error;
-        
-        // Prevent redirecting to login page if Supabase returns a registration error
-        if (result instanceof Error || !('user' in result) || !result.user) {
-            const errorMessage = result instanceof Error ? result.message : "Signup failed.";
-            setCredError(errorMessage);
-            return;
+        try {
+            if (page === "login") {
+                if (!signInLoaded) return;
+
+                const result = await login(
+                    signIn,
+                    form.email,
+                    form.password
+                );
+
+                if (result.status === "complete") {
+                    await setActive({
+                        session: result.createdSessionId,
+                    });
+
+                    navigate("/");
+                }
+            }
+
+            if (page === "signup") {
+                if (!signUpLoaded) return;
+
+                await signup(
+                    signUp,
+                    form.name,
+                    form.email,
+                    form.password,
+                    form.phone
+                );
+
+                navigate("/verify-email");
+            }
+        } catch (err) {
+            setCredError(getErrorMessage(err));
+        } finally {
+            setIsSubmitting(false);
         }
-
-        // Account created successfully or waiting for email confirmation
-        setPage('login'); 
-    }
-};
+    };
 
     const formFields = (
         <>
             {page === 'signup' && (
-                <label className="flex flex-col gap-2 text-sm text-[#F8F5F0]/80">
-                    Full Name
-                    <input
-                        onChange={handleChange}
-                        value={form.name}
-                        name="name" // Added name attribute
-                        type="text"
-                        placeholder="Your name"
-                        className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
-                    />
-                </label>
+                <div>
+                    <label className="flex flex-col gap-2 text-sm text-[#F8F5F0]/80">
+                        Full Name
+                        <input
+                            onChange={handleChange}
+                            value={form.name}
+                            name="name"
+                            type="text"
+                            placeholder="Your name"
+                            className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
+                        />
+                    </label>
+                </div>
+
             )}
 
             <label className="flex flex-col gap-2 text-sm text-[#F8F5F0]/80">
@@ -91,28 +128,38 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
                 <input
                     value={form.email}
                     onChange={handleChange}
-                    name="email" // Added name attribute
+                    name="email"
                     type="email"
                     placeholder="name@example.com"
                     className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
                 />
             </label>
 
+            {page === 'signup' &&
+                <label className="flex flex-col gap-2 text-sm text-[#F8F5F0]/80">
+                    Phone Number
+                    <input
+                        value={form.phone}
+                        onChange={handleChange}
+                        name="phone"
+                        type="tel"
+                        placeholder="03012334567"
+                        className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
+                    />
+                </label>}
             <label className="relative flex flex-col gap-2 text-sm text-[#F8F5F0]/80">
                 Password
                 <input
                     value={form.password}
                     onChange={handleChange}
                     name="password"
-                    // Toggle type dynamically based on state
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 pr-12 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
                 />
 
-                {/* Clickable Icon Wrapper */}
                 <button
-                    type="button" // Prevents form submission on click
+                    type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 bottom-3.5 text-[#F8F5F0]/50 hover:text-[#F8F5F0]/80 cursor-pointer transition focus:outline-none"
                 >
@@ -127,7 +174,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
                         <input
                             value={form.confirmPassword}
                             onChange={handleChange}
-                            name="confirmPassword" // Added name attribute
+                            name="confirmPassword"
                             type="password"
                             placeholder="Repeat your password"
                             className="rounded-2xl bg-[#151515]/80 border border-white/10 px-4 py-3 text-sm text-[#F8F5F0] placeholder:text-[#F8F5F0]/40 focus:border-[#D6B98C]/70 focus:outline-none focus:ring-2 focus:ring-[#D6B98C]/15 transition"
@@ -139,23 +186,17 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
                     )}
                 </>
             )}
-
-            <div className="flex items-center justify-between gap-3 text-xs text-[#F8F5F0]/60">
-                {page === 'login' ? (
-                    <label className="inline-flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded-xl border-white/20 bg-[#0B0B0B] text-[#D6B98C] focus:ring-[#D6B98C]/60" />
-                        Remember me
-                    </label>
-                ) : (
-                    <div />
-                )}
-                {page === 'login' && <button type="button" className="text-[#D6B98C] hover:text-[#F8F5F0] transition">Forgot password?</button>}
-            </div>
             {
                 credError && <p className="text-xs text-red-500 mt-1">{credError}</p>
             }
-            <button type="submit" className="w-full rounded-3xl bg-[#D6B98C] px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#c9b06d] shadow-[0_20px_50px_rgba(214,185,140,0.18)]">
-                {page === 'login' ? 'Sign in' : 'Create account'}
+            <button
+                type="submit"
+                disabled={isSubmitting || (page === 'login' ? !signInLoaded : !signUpLoaded)}
+                className="w-full rounded-3xl bg-[#D6B98C] px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#c9b06d] shadow-[0_20px_50px_rgba(214,185,140,0.18)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                {isSubmitting
+                    ? (page === 'login' ? 'Signing in...' : 'Creating account...')
+                    : (page === 'login' ? 'Sign in' : 'Create account')}
             </button>
         </>
     )
@@ -220,8 +261,19 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
                                 </div>
 
                                 <div className="mt-8 space-y-6">
-                                    <button type="button" className="flex w-full items-center justify-center gap-3 rounded-3xl border border-white/10 bg-[#111111]/90 px-4 py-3 text-sm text-[#F8F5F0] transition hover:border-[#D6B98C]/40 hover:bg-[#171413]"
-                                        onClick={handleGoogleLogin}
+                                    <button
+                                        type="button"
+                                        disabled={!signInLoaded}
+                                        className="flex w-full items-center justify-center gap-3 rounded-3xl border border-white/10 bg-[#111111]/90 px-4 py-3 text-sm text-[#F8F5F0] transition hover:border-[#D6B98C]/40 hover:bg-[#171413] disabled:opacity-50 disabled:cursor-not-allowed"
+                                        onClick={async () => {
+                                            try {
+                                                if (!signInLoaded) return;
+
+                                                await googleLogin(signIn);
+                                            } catch (err) {
+                                                setCredError(getErrorMessage(err));
+                                            }
+                                        }}
                                     >
                                         <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-[#0B0B0B] text-lg">G</span>
                                         Continue with Google

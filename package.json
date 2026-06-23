@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.61.8",
+    "@clerk/react": "^6.10.0",
+    "@clerk/types": "^4.101.25",
+    "@clerk/ui": "^1.17.0",
     "@gsap/react": "^2.1.2",
     "@supabase/supabase-js": "^2.107.0",
     "@tailwindcss/vite": "^4.3.0",

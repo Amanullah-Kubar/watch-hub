@@ -1,17 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { AuthProvider } from './context/AuthContext.tsx';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.tsx';
 
-gsap.registerPlugin(useGSAP);
+import { ClerkProvider } from '@clerk/clerk-react';
+import { dark } from '@clerk/ui/themes';
 
 createRoot(document.getElementById('root')!).render(
-  <AuthProvider>
-    <StrictMode>
+  <StrictMode>
+    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+    appearance={{
+      theme : dark
+    }
+    }
+    >
       <App />
-    </StrictMode>
-  </AuthProvider>
-)
+    </ClerkProvider>
+  </StrictMode>
+);
