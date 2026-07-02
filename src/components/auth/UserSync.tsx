@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { saveProfile } from "./auth/authServices";
+import { saveProfile } from "./authServices";
 
 export default function UserSync() {
   const { user, isLoaded } = useUser();

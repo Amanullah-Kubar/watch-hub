@@ -4,9 +4,9 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Collection from './components/sections/collections/Collection';
 import AuthPage from './components/auth/AuthPage';
-import SsoCallback from './components/SsoCallback';
-import VerifyEmail from './components/VarifyEmail';
-import UserSync from './components/UserSync';
+import SsoCallback from './components/auth/SsoCallback';
+import VerifyEmail from './components/auth/VarifyEmail';
+import UserSync from './components/auth/UserSync';
 
 function App() {
 

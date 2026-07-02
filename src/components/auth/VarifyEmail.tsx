@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSignUp } from "@clerk/clerk-react";
-import { saveProfile } from "./auth/authServices";
+import { saveProfile } from "./authServices";
 
 export default function VerifyEmail() {
   const [code, setCode] = useState("");

@@ -1,273 +1,197 @@
-import {
-    ArrowRight,
-    ShieldCheck,
-    Truck,
-    BadgeDollarSign,
-    Clock3,
-} from "lucide-react";
+// AboutSection.tsx
+//
+// Matches Stile design system:
+//   bg:        #FFFFFF / #F8F5F0
+//   dark:      #1A2320
+//   accent:    #4A7C6B  (Deep Forest Green — Theme C)
+//   panel:     #C8D8D0
+//   serif:     Georgia
+//   tracking:  tight headings, wide labels
 
-import {
-    FaFacebookF,
-    FaInstagram,
-} from "react-icons/fa";
+import { ArrowRight, ShieldCheck, Truck, BadgeDollarSign, Clock3 } from "lucide-react";
+
+const FEATURES = [
+  {
+    icon: ShieldCheck,
+    title: "Premium Quality",
+    desc: "Crafted with durable materials and refined finishing on every piece.",
+  },
+  {
+    icon: Truck,
+    title: "Fast Delivery",
+    desc: "Reliable shipping designed for a smooth, worry-free experience.",
+  },
+  {
+    icon: BadgeDollarSign,
+    title: "Affordable Luxury",
+    desc: "Premium-inspired style without the inflated heritage price tag.",
+  },
+  {
+    icon: Clock3,
+    title: "Timeless Design",
+    desc: "Minimal aesthetics that hold up — on the wrist, in every room.",
+  },
+];
+
 export default function AboutSection() {
-    return (
-        <section className="bg-[#0B0B0B] text-white py-24 px-6 md:px-14 overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+  return (
+    <section
+      className="w-full overflow-hidden"
+      style={{ background: "#F8F5F0" }}
+      aria-label="About Stile"
+    >
+      {/* ── Main grid ───────────────────────────────────────────────────── */}
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-8 py-24 md:px-16 lg:grid-cols-2 lg:items-center">
 
-                {/* Left Content */}
+        {/* ── Left — text ─────────────────────────────────────────────── */}
+        <div>
+          {/* Eyebrow */}
+          <p
+            className="mb-5 text-[10px] tracking-[0.45em] uppercase font-medium"
+            style={{ color: "#4A7C6B" }}
+          >
+            About Stile
+          </p>
+
+          {/* Headline */}
+          <h2
+            className="text-5xl md:text-6xl font-semibold leading-tight tracking-tight"
+            style={{ fontFamily: "Georgia, serif", color: "#1A2320" }}
+          >
+            Luxury Aesthetics
+            <span
+              className="block italic mt-1"
+              style={{ color: "#4A7C6B" }}
+            >
+              Made Affordable
+            </span>
+          </h2>
+
+          {/* Hairline */}
+          <div
+            className="my-8"
+            style={{
+              height: "1px",
+              width: "64px",
+              background: "#4A7C6B",
+            }}
+          />
+
+          {/* Body copy */}
+          <p
+            className="text-base leading-relaxed max-w-lg"
+            style={{ color: "#1A2320", opacity: 0.65 }}
+          >
+            Stile was built for people who appreciate timeless watch design
+            without spending absurd sums on branding disguised as "heritage."
+            We focus on elegant aesthetics, modern craftsmanship, and
+            everyday wearability.
+          </p>
+
+          <p
+            className="mt-5 text-sm leading-relaxed max-w-lg"
+            style={{ color: "#1A2320", opacity: 0.45 }}
+          >
+            Every collection combines luxury-inspired visuals with practical
+            pricing — so style becomes accessible without sacrificing
+            sophistication.
+          </p>
+
+          {/* ── Feature cards ──────────────────────────────────────────── */}
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {FEATURES.map(({ icon: Icon, title, desc }) => (
+              <div
+                key={title}
+                className="group flex gap-4 items-start p-5 transition-colors duration-200"
+                style={{
+                  background: "#FFFFFF",
+                  border: "1px solid #C8D8D0",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#4A7C6B";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "#C8D8D0";
+                }}
+              >
+                <Icon
+                  size={22}
+                  style={{ color: "#4A7C6B", flexShrink: 0, marginTop: "2px" }}
+                />
                 <div>
-                    <p className="uppercase tracking-[0.3em] text-[#D6B98C] text-sm mb-4">
-                        ABOUT WATCH-HUB
-                    </p>
-
-                    <h2
-                        style={{ fontFamily: "Nikanely" }}
-                        className="text-5xl md:text-7xl leading-tight text-[#F8F5F0]"
-                    >
-                        Luxury Aesthetics
-                        <span className="block text-[#D6B98C] italic mt-2">
-                            Made Affordable
-                        </span>
-                    </h2>
-
-                    <p className="text-gray-400 text-lg leading-relaxed mt-8 max-w-2xl">
-                        WATCH-HUB was built for people who appreciate timeless
-                        watch designs without spending absurd amounts of money on
-                        branding campaigns disguised as “heritage.” We focus on
-                        elegant aesthetics, modern craftsmanship, and everyday
-                        wearability.
-                    </p>
-
-                    <p className="text-gray-500 leading-relaxed mt-6">
-                        Every collection is designed to combine luxury-inspired
-                        visuals with practical pricing so style becomes
-                        accessible without sacrificing sophistication.
-                    </p>
-
-                    {/* Features */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-12">
-                        <div className="bg-[#151515] border border-white/5 rounded-3xl p-5 flex gap-4 items-start hover:border-[#D6B98C]/30 transition">
-                            <ShieldCheck className="text-[#D6B98C]" size={28} />
-
-                            <div>
-                                <h4 className="text-lg font-medium text-[#F8F5F0]">
-                                    Premium Quality
-                                </h4>
-
-                                <p className="text-gray-500 text-sm mt-1">
-                                    Crafted with durable materials and refined
-                                    finishing.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-[#151515] border border-white/5 rounded-3xl p-5 flex gap-4 items-start hover:border-[#D6B98C]/30 transition">
-                            <Truck className="text-[#D6B98C]" size={28} />
-
-                            <div>
-                                <h4 className="text-lg font-medium text-[#F8F5F0]">
-                                    Fast Delivery
-                                </h4>
-
-                                <p className="text-gray-500 text-sm mt-1">
-                                    Reliable shipping designed for smooth
-                                    customer experience.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-[#151515] border border-white/5 rounded-3xl p-5 flex gap-4 items-start hover:border-[#D6B98C]/30 transition">
-                            <BadgeDollarSign
-                                className="text-[#D6B98C]"
-                                size={28}
-                            />
-
-                            <div>
-                                <h4 className="text-lg font-medium text-[#F8F5F0]">
-                                    Affordable Luxury
-                                </h4>
-
-                                <p className="text-gray-500 text-sm mt-1">
-                                    Premium-inspired style without premium
-                                    pricing.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-[#151515] border border-white/5 rounded-3xl p-5 flex gap-4 items-start hover:border-[#D6B98C]/30 transition">
-                            <Clock3 className="text-[#D6B98C]" size={28} />
-
-                            <div>
-                                <h4 className="text-lg font-medium text-[#F8F5F0]">
-                                    Timeless Design
-                                </h4>
-
-                                <p className="text-gray-500 text-sm mt-1">
-                                    Minimal aesthetics designed for every
-                                    occasion.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                  <h4
+                    className="text-sm font-semibold mb-1"
+                    style={{ color: "#1A2320" }}
+                  >
+                    {title}
+                  </h4>
+                  <p className="text-xs leading-relaxed" style={{ color: "#1A2320", opacity: 0.5 }}>
+                    {desc}
+                  </p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-                {/* Right Side */}
-                <div className="relative">
-                    {/* Main Image */}
-                    <div className="relative overflow-hidden rounded-[40px] border border-white/10">
-                        <img
-                            src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop"
-                            alt="Luxury Watch"
-                            className="w-full h-175 object-cover hover:scale-105 transition duration-700"
-                        />
+        {/* ── Right — image ────────────────────────────────────────────── */}
+        <div className="relative">
+          {/* Sage background block — offset decorative panel */}
+          <div
+            className="absolute -top-8 -right-8 bottom-8 left-8 -z-0"
+            style={{ background: "#C8D8D0" }}
+          />
 
-                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"></div>
+          {/* Image */}
+          <div className="relative overflow-hidden" style={{ zIndex: 1 }}>
+            <img
+              src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop"
+              alt="Stile luxury watch on wrist"
+              className="w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+              style={{ height: "560px" }}
+            />
 
-                        {/* Floating Card */}
-                        <div className="absolute bottom-8 left-8 bg-black/50 backdrop-blur-xl border border-white/10 rounded-3xl p-6 max-w-sm">
-                            <p className="text-[#D6B98C] text-sm uppercase tracking-[0.2em]">
-                                WATCH-HUB
-                            </p>
+            {/* Bottom gradient overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(26,35,32,0.80) 0%, rgba(26,35,32,0.10) 50%, transparent 100%)",
+              }}
+            />
 
-                            <h3
-                                style={{ fontFamily: "Nikanely" }}
-                                className="text-3xl text-[#F8F5F0] mt-3"
-                            >
-                                Designed for Everyday Elegance
-                            </h3>
-
-                            <button className="mt-5 flex items-center gap-2 text-[#D6B98C] hover:gap-4 transition-all duration-300">
-                                Explore Collections
-                                <ArrowRight size={18} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            {/* Floating card */}
+            <div
+              className="absolute bottom-8 left-8 right-8 p-6 max-w-xs"
+              style={{
+                background: "rgba(26,35,32,0.72)",
+                backdropFilter: "blur(16px)",
+                border: "1px solid rgba(200,216,208,0.15)",
+              }}
+            >
+              <p
+                className="text-[9px] tracking-[0.4em] uppercase mb-3"
+                style={{ color: "#4A7C6B" }}
+              >
+                Stile
+              </p>
+              <h3
+                className="text-2xl font-semibold leading-snug mb-4"
+                style={{ fontFamily: "Georgia, serif", color: "#F8F5F0" }}
+              >
+                Designed for Everyday Elegance
+              </h3>
+              <button
+                className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-all duration-300 hover:gap-4"
+                style={{ color: "#C8D8D0" }}
+              >
+                Explore Collections
+                <ArrowRight size={14} />
+              </button>
             </div>
-
-            {/* Footer Links */}
-            <div className="border-t border-white/10 mt-24 pt-12 grid grid-cols-1 md:grid-cols-4 gap-12">
-
-                {/* Brand */}
-                <div>
-                    <h3
-                        style={{ fontFamily: "Nikanely" }}
-                        className="text-4xl text-[#F8F5F0]"
-                    >
-                        WATCH-HUB
-                    </h3>
-
-                    <p className="text-gray-500 mt-4 leading-relaxed">
-                        Luxury-inspired watches designed for modern lifestyles
-                        with timeless aesthetics and accessible pricing.
-                    </p>
-
-                    {/* Socials */}
-                    <div className="flex gap-4 mt-6">
-                        <button className="p-3 rounded-full bg-[#151515] border border-white/5 hover:bg-[#D6B98C] hover:text-black transition">
-                            <FaFacebookF size={14} />
-                        </button>
-
-                        <button className="p-3 rounded-full bg-[#151515] border border-white/5 hover:bg-[#D6B98C] hover:text-black transition">
-                            <FaInstagram size={14} />
-                        </button>
-
-
-                    </div>
-                </div>
-
-                {/* Links */}
-                <div>
-                    <h4 className="text-xl text-[#F8F5F0] mb-5">
-                        Collections
-                    </h4>
-
-                    <ul className="space-y-3 text-gray-500">
-                        <a href="#collections" className="hover:text-[#D6B98C] transition cursor-pointer">
-                            <li>
-                                Featured Collections
-                            </li>
-                        </a>
-
-                        <a href="#vintage" className="hover:text-[#D6B98C] transition cursor-pointer">
-                            <li>
-                                Vintage Collection
-                            </li>
-                        </a>
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Classic Watches
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Modern Series
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Leather Collection
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Everyday Essentials
-                        </li>
-
-                        <a href="#about" className="hover:text-[#D6B98C] transition cursor-pointer">
-                            <li>
-                                About Us
-                            </li>
-                        </a>
-
-                    </ul>
-                </div>
-
-                {/* Support */}
-                <div>
-                    <h4 className="text-xl text-[#F8F5F0] mb-5">
-                        Support
-                    </h4>
-
-                    <ul className="space-y-3 text-gray-500">
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Contact Us
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Shipping Policy
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            Returns & Refunds
-                        </li>
-
-                        <li className="hover:text-[#D6B98C] transition cursor-pointer">
-                            FAQs
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Newsletter */}
-                <div>
-                    <h4 className="text-xl text-[#F8F5F0] mb-5">
-                        Stay Updated
-                    </h4>
-
-                    <p className="text-gray-500 mb-5">
-                        Subscribe for latest arrivals and exclusive collections.
-                    </p>
-
-                    <div className="flex items-center bg-[#151515] rounded-full overflow-hidden border border-white/10">
-                        <input
-                            type="email"
-                            placeholder="Your email"
-                            className="bg-transparent px-5 py-4 outline-none flex-1 text-sm"
-                        />
-
-                        <button className="bg-[#D6B98C] text-black px-5 py-4 hover:opacity-90 transition">
-                            <ArrowRight size={18} />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

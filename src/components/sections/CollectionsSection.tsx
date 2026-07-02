@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import UseReveal from "../hooks/UseReveal";
 
 interface CollectionItem {
     id: number;
@@ -37,7 +36,6 @@ const collections: CollectionItem[] = [
 ];
 
 export default function Collections(): React.JSX.Element {
-    const ref = UseReveal();
     const navigate = useNavigate();
 
     // Helper function to turn "Leather Series" into "leather-series"
@@ -48,7 +46,6 @@ export default function Collections(): React.JSX.Element {
 
     return (
         <section className="w-full bg-[#0B0B0B] py-20 px-6 md:px-14"
-            ref={ref}
         >
             {/* Heading */}
             <div className="text-center mb-16">

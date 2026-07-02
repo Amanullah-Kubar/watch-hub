@@ -4,9 +4,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import AboutSection from './sections/AboutSection';
 import VintageSection from './sections/VintageSection';
-import Luxury from './sections/Luxury';
-import Collections from './sections/CollectionsSection';
+import Luxury from './sections/Footer';
 import HeroSection from './sections/HeroSection';
+import Catalog from './sections/Catalog';
+import Footer from './sections/Footer';
 
 function Home() {
     useEffect(() => {
@@ -24,20 +25,16 @@ function Home() {
                 <HeroSection />
             </section>
 
-            <div id='collections' data-aos="fade-up" data-aos-delay="150">
-                <Collections />
+            <div id='catalog' data-aos="fade-up" data-aos-delay="150">
+                <Catalog />
             </div>
 
-            <div id='luxury' data-aos="fade-up" data-aos-delay="200">
-                <Luxury />
-            </div>
-
-            <div id='vintage' data-aos="zoom-in-up" data-aos-delay="200">
-                <VintageSection />
-            </div>
-
-            <div id='about' data-aos="fade-up" data-aos-delay="300">
+            <div id='about-us' data-aos="fade-up" data-aos-delay="300">
                 <AboutSection />
+            </div>
+
+            <div id='blog' data-aos="fade-up" data-aos-delay="200">
+                <Footer />
             </div>
         </div>
     )

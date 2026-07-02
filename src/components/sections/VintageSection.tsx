@@ -1,10 +1,7 @@
-import UseReveal from "../hooks/UseReveal";
 import ProductSection from "../ProductCard";
 function VintageSection() {
-    const ref = UseReveal();
     return (
-        <section className="py-24 px-6 md:px-14 bg-[#0B0B0B] overflow-hidden"
-            ref={ref}>
+        <section className="py-24 px-6 md:px-14 bg-[#0B0B0B] overflow-hidden">
 
             {/* Heading */}
             <div className="text-center max-w-4xl mx-auto mb-20">
